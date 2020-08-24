@@ -37,6 +37,8 @@ const uvMap16 = [
 
 const uvTo = [0,1,4,5,2,3,6,7,8,9,12,13,10,11,14,15];
 
+let _blank = 15;
+
 
 
 var container, stats;
@@ -51,6 +53,8 @@ var obj3d = new THREE.Object3D();
 
 var group = new THREE.Group();
 
+var pieces = [];
+
 var params = {
 	edgeStrength: 3.0,
 	edgeGlow: 0.0,
@@ -59,6 +63,8 @@ var params = {
 	rotate: false,
 	usePatternTexture: false
 };
+
+var coord = [];
 
 
 
@@ -80,9 +86,11 @@ function init() {
 	document.body.appendChild( renderer.domElement );
 
 	scene = new THREE.Scene();
+	scene.add(new THREE.AxesHelper(5));
 
-	camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 100 );
+	camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 200 );
 	camera.position.set( 20 , 20, 10 );
+	camera.lookAt(0,0,0);
 
 	controls = new OrbitControls( camera, renderer.domElement );
 	controls.minDistance = 5;
@@ -138,6 +146,9 @@ function init() {
 
 	for (let i = 0; i < 4; i ++ ) {
 		for (let j = 0; j < 4; j ++ ) {
+				coord.push({z: 10 * i + 1 * i, x: 10*j+1*j-25 });
+
+
 				if (!(i===3 && j===3)) {
 					console.log(i,j);
 
@@ -151,11 +162,14 @@ function init() {
 						plane.position.z = 10 * i + 1 * i;
 						plane.position.x = 10 * j + 1 * j - 25;
 						plane.rotation.x = - Math.PI / 2;
-						plane.data = i*4+j;
 
+						plane.data = i*4+j;
+						plane.pos = i*4 + j;
 						let uv = uvMap16[uvTo[i*4+j]];
 						var uvs = new Float32Array( uv);
 						pGeo.setAttribute( 'uv', new THREE.BufferAttribute( uvs, 2 ) );
+						pieces.push(plane);
+						console.log('piecs', pieces);
 						group.add(plane);
 				}
 		}
@@ -206,7 +220,97 @@ function init() {
 
 	function onclick() {
 		console.log('clicked!', selectedObjects ? selectedObjects[0].data : null);
-	}
+		console.log('_blank!', _blank);
+		// get some data
+		let index = selectedObjects[0].data;
+		let pos = selectedObjects[0].pos;
+
+			console.log('index', index);
+
+		if (pos === (_blank - 1 ) ) {
+			 //left
+			 pieces[index].position.set(coord[_blank].x, 0, coord[_blank].z);
+			 pieces[index]['pos'] = _blank;
+			 _blank = pos;
+		} else if (pos === (_blank + 1 ) ) {
+			 //right
+			 pieces[index].position.set(coord[_blank].x, 0, coord[_blank].z);
+			  pieces[index]['pos'] = _blank;
+			 _blank  = pos;
+		} else if (pos === _blank + 4 ) {
+			pieces[index].position.set(coord[_blank].x, 0, coord[_blank].z);
+			pieces[index]['pos'] = _blank;
+			_blank = pos;
+		} else if (pos === _blank - 4 ) {
+			pieces[index].position.set(coord[_blank].x, 0, coord[_blank].z);
+			pieces[index]['pos'] = _blank;
+			_blank = pos;
+		} else {
+			if (
+				( [0,1,2,3].includes(pos) && [0,1,2,3].includes(_blank) )
+				||
+				( [4,5,6,7].includes(pos) && [4,5,6,7].includes(_blank) )
+				||
+				([8,9,10,11].includes(pos) && [8,9,10,11].includes(_blank) )
+				||
+				( [12,13,14,15].includes(pos) && [12,13,14,15].includes(_blank) )
+			) {
+				if (pos < _blank) {
+					let diff = _blank - pos;
+					for (let i = 0; i < diff; i ++) {
+						let curr = _blank - 1 - i;
+						let currPiece = pieces.filter(piece => piece.pos === curr)[0];
+						let currIndex = currPiece.data;
+
+						pieces[currIndex].position.set(coord[_blank-i].x, 0, coord[_blank-i].z);
+						pieces[currIndex]['pos'] = _blank -i;
+					}
+				} else {
+					let diff = pos - _blank;
+					for (let i = 0; i < diff; i ++) {
+						let curr = _blank + 1 + i;
+						let currPiece = pieces.filter(piece => piece.pos === curr)[0];
+						let currIndex = currPiece.data;
+						pieces[currIndex].position.set(coord[_blank+i].x, 0, coord[_blank+i].z);
+						pieces[currIndex]['pos'] = _blank + i;
+					}
+
+				}
+				_blank = pos;
+			} else if ((pos - _blank) % 4 === 0){
+				if (pos < _blank) {
+					let diff = parseInt((_blank - pos)/4);
+					for (let i = 0; i < diff; i ++) {
+						let curr = _blank - ((i+1)*4);
+						let currPiece = pieces.filter(piece => piece.pos === curr)[0];
+						let currIndex = currPiece.data;
+						pieces[currIndex].position.set(coord[_blank-i*4].x, 0, coord[_blank-i*4].z);
+						pieces[currIndex]['pos'] = _blank - i*4;
+					}
+
+
+				} else {
+					let diff = parseInt((pos - _blank)/4);
+					for (let i = 0; i < diff; i ++) {
+						let curr = _blank + ((i+1)*4);
+						let currPiece = pieces.filter(piece => piece.pos === curr)[0];
+						let currIndex = currPiece.data;
+						pieces[currIndex].position.set(coord[_blank+i*4].x, 0, coord[_blank+i*4].z);
+						pieces[currIndex]['pos'] = _blank  + i*4;
+					}
+
+
+				}
+				_blank = pos;
+
+			} else {
+				// not a vaild move
+				console.log('no move');
+			}
+
+
+		}
+}
 
 
 	function onTouchMove( event ) {
