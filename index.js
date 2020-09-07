@@ -67,6 +67,12 @@ var params = {
 
 var coord = [];
 
+const randomButton = document.getElementById('random');
+const solveButton = document.getElementById('solve');
+console.log('randomButton', randomButton);
+console.log('solveButton', solveButton);
+
+
 function solved(arr) {
   var a  = arr.map((x)=> {
 
@@ -185,43 +191,19 @@ function init() {
             */
 
             plane.rotation.x = - Math.PI / 2;
-
 						plane.data = i*4+j;
-						// plane.pos = i*4 + j;
 						let uv = uvMap16[uvTo[i*4+j]];
 						var uvs = new Float32Array( uv);
 						pGeo.setAttribute( 'uv', new THREE.BufferAttribute( uvs, 2 ) );
 						pieces.push(plane);
-						//console.log('piecs', pieces);
-						//group.add(plane);
 				}
 		}
 	}
 
 
-  // console.log('initial pos', initialPos);
-  // console.log('coord', coord);
-  // pieces.forEach((piece, i) => {
-  //   console.log('pieces.data', piece.data)
-  //   let currPos = initialPos[i];
-  //   console.log('currPos', currPos);
-  //
-  //   piece.position.x = coord[currPos].x;
-  //   piece.position.z = coord[currPos].z;
-  //   piece.pos = currPos;
-  //   group.add(piece);
-  //
-  //   if (currPos === 15) {
-  //
-  //     _blank = i;
-  //   }
-  //
-  // });
-
   initialPos.forEach((el, i)=> {
     if (el !== 15) {
       let currPiece = pieces.filter(piece => piece.data === el)[0];
-
       currPiece.pos = i;
       currPiece.position.x = coord[i].x;
       currPiece.position.z = coord[i].z;
@@ -271,6 +253,44 @@ function init() {
 	window.addEventListener( 'mousemove', onTouchMove );
 	window.addEventListener( 'touchmove', onTouchMove );
 	renderer.domElement.addEventListener("click", onclick, true);
+
+  solveButton.addEventListener('click', onSolveClick, true);
+  randomButton.addEventListener('click', onRandomClick, true);
+
+  function onSolveClick() {
+    console.log('solve clicked');
+
+    [...Array(15).keys()].forEach((i)=> {
+
+      let currPiece = pieces[i];
+      // console.log('currPiece', currPiece);
+      currPiece.pos = i;
+      currPiece.position.x = coord[i].x;
+      currPiece.position.z = coord[i].z;
+
+    });
+    _blank = 15;
+  }
+
+
+  function onRandomClick() {
+    console.log('random clicked');
+
+    let randomPos = getRandomPos();
+    console.log('randomPos', randomPos);
+
+    randomPos.forEach((el, i)=> {
+      if (el !== 15) {
+        let currPiece = pieces.filter(piece => piece.data === el)[0];
+        currPiece.pos = i;
+        currPiece.position.x = coord[i].x;
+        currPiece.position.z = coord[i].z;
+      } else {
+        _blank = i;
+      }
+    });
+
+  }
 
 	function onclick() {
     // console.log('selectedObjects', selectedObjects)
