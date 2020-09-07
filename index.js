@@ -133,11 +133,23 @@ function init() {
 	scene = new THREE.Scene();
 	scene.add(new THREE.AxesHelper(5));
 
+  var x_axis = new THREE.Vector3( 1, 0, 0 );
+  var quaternion = new THREE.Quaternion;
+
 	camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 200 );
-	camera.position.set( 20 , 20, 10 );
+	camera.position.set(0 , 100, 0 );
+  // camera.rotation.y = - Math.PI / 2;
+  //
+  // camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, rotation_speed));
+  // camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, rotation_speed));
+
+  // console.log('camera', camera.rotation);
 	camera.lookAt(0,0,0);
 
 	controls = new OrbitControls( camera, renderer.domElement );
+
+
+
 	controls.minDistance = 5;
 	controls.maxDistance = 100;
 	controls.enablePan = false;
@@ -175,7 +187,11 @@ function init() {
 
 	for (let i = 0; i < 4; i ++ ) {
 		for (let j = 0; j < 4; j ++ ) {
-				coord.push({z: 10 * i + 1 * i, x: 10*j+1*j-25 });
+
+
+        coord.push({z: 10 * i + 1 * i - 16.5 , x: 10*j+1*j - 16.5});
+
+
 				if (!(i===3 && j===3)) {
 					let pGeo = new THREE.PlaneBufferGeometry( 10, 10 );
 
