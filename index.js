@@ -14,7 +14,10 @@ import { FXAAShader } from './three.js/examples/jsm/shaders/FXAAShader.js';
 const txtfile = require('./grid-sprite.jpg');
 const txtfile2 = require('./meeko.jpg');
 const txtfile3 = require('./tri_pattern.jpg');
-
+const videoSource = require('./saved.mp4');
+var video;
+var texture;
+var videoImageContext;
 
 const uvMap16 = [
     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
@@ -181,7 +184,35 @@ function init() {
 
 	var material = new THREE.MeshPhongMaterial( { color: 0xffaaff } );
 
-	var texture = new THREE.TextureLoader().load(txtfile2);
+
+
+  video = document.createElement( 'video' );
+           // video.id = 'video';
+           // video.type = ' video/ogg; codecs="theora, vorbis" ';
+  console.log('video source', videoSource);
+  // video.type = ' video/ogg; codecs="theora, vorbis" ';
+console.log('video ', video);
+  video.autoplay = true;
+   video.src = videoSource;
+   video.load(); // must call after setting/changing source
+   video.muted = true;
+   video.loop = true;
+   video.play();
+
+   let videoImage = document.createElement( 'canvas' );
+    videoImage.width = 480;
+    videoImage.height = 480;
+
+    videoImageContext = videoImage.getContext( '2d' );
+    // background color if no video present
+    videoImageContext.fillStyle = '#000000';
+    videoImageContext.fillRect( 0, 0, videoImage.width, videoImage.height );
+    texture = new THREE.Texture(videoImage);
+
+  texture.minFilter = THREE.LinearFilter;
+  texture.magFilter = THREE.LinearFilter;
+  //texture.needsUpdate = true;
+
 	var planeMaterial = new THREE.MeshBasicMaterial( { map: texture, morphTargets: true, transparent: false} );
 
 
@@ -465,6 +496,16 @@ function onWindowResize() {
 }
 
 function animate() {
+
+
+  if(video.readyState === video.HAVE_ENOUGH_DATA){
+    //draw video to canvas starting from upper left corner
+    //console.log('video', video);
+    videoImageContext.drawImage(video, 0, 0);
+    //tell texture object it needs to be updated
+    texture.needsUpdate = true;
+  }
+
 
 	requestAnimationFrame( animate );
 
