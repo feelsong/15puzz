@@ -72,8 +72,11 @@ var coord = [];
 
 const randomButton = document.getElementById('random');
 const solveButton = document.getElementById('solve');
+const originalButton = document.getElementById('original');
 console.log('randomButton', randomButton);
 console.log('solveButton', solveButton);
+
+let originalClicked = false;
 
 
 function solved(arr) {
@@ -220,7 +223,9 @@ console.log('video ', video);
 		for (let j = 0; j < 4; j ++ ) {
 
 
-        coord.push({z: 10 * i + 1 * i - 16.5 , x: 10*j+1*j - 16.5});
+          // coord.push({z: 10 * i + 1 * i - 16.5 , x: 10*j+1*j - 16.5});
+
+          coord.push({z: 10 * i - 15 , x: 10*j - 15});
 
 
 				if (!(i===3 && j===3)) {
@@ -246,6 +251,14 @@ console.log('video ', video);
 				}
 		}
 	}
+
+
+  let backGeo = new THREE.PlaneBufferGeometry( 40, 40 );
+  let backPlane = new THREE.Mesh(backGeo,planeMaterial);
+  backPlane.position.y = 0;
+  backPlane.rotation.x = Math.PI / 2;
+  backPlane.rotation.z = Math.PI;
+  group.add(backPlane);
 
 
   initialPos.forEach((el, i)=> {
@@ -303,6 +316,8 @@ console.log('video ', video);
 
   solveButton.addEventListener('click', onSolveClick, true);
   randomButton.addEventListener('click', onRandomClick, true);
+  originalButton.addEventListener('click', onOriginalClick, true);
+
 
   function onSolveClick() {
     console.log('solve clicked');
@@ -337,6 +352,26 @@ console.log('video ', video);
       }
     });
 
+  }
+
+  function onOriginalClick() {
+    console.log('original clicked');
+
+    originalClicked = true;
+
+
+
+    pieces.forEach((piece)=> {
+
+      let pos = piece.pos;
+      piece.position.x = (pos%4)*10 -15;
+      piece.position.z = Math.floor(pos/4)*10 - 15;
+
+
+
+    });
+
+    console.log('group', group);
   }
 
 	function onclick() {
@@ -505,19 +540,21 @@ function animate() {
     //tell texture object it needs to be updated
     texture.needsUpdate = true;
   }
+ var timer = performance.now();
+  if ( originalClicked ) {
+    console.log('clicked here', group.rotation.y);
+    group.rotation.z += timer * 0.000001;
+
+  }
 
 
 	requestAnimationFrame( animate );
 
 	//stats.begin();
 
-	var timer = performance.now();
 
-	if ( params.rotate ) {
 
-		group.rotation.y = timer * 0.0001;
 
-	}
   //
 	// controls.update();
 
