@@ -14,10 +14,19 @@ import { FXAAShader } from './three.js/examples/jsm/shaders/FXAAShader.js';
 const txtfile = require('./grid-sprite.jpg');
 const txtfile2 = require('./meeko.jpg');
 const txtfile3 = require('./tri_pattern.jpg');
+
+
+
 const videoSource = require('./saved.mp4');
+const videoSource2 = require('./1.mp4');
+const videoSource3 = require('./2.mp4');
+let videoIdx = 0;
+let videos = [videoSource, videoSource2, videoSource3];
+
 var video;
 var texture;
 var videoImageContext;
+
 
 const uvMap16 = [
     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
@@ -73,10 +82,9 @@ var coord = [];
 const randomButton = document.getElementById('random');
 const solveButton = document.getElementById('solve');
 const originalButton = document.getElementById('original');
-console.log('randomButton', randomButton);
-console.log('solveButton', solveButton);
+const changeButton = document.getElementById('change');
 
-let originalClicked = false;
+let originalMode = false;
 
 
 function solved(arr) {
@@ -196,7 +204,7 @@ function init() {
   // video.type = ' video/ogg; codecs="theora, vorbis" ';
 console.log('video ', video);
   video.autoplay = true;
-   video.src = videoSource;
+   video.src = videos[2];
    video.load(); // must call after setting/changing source
    video.muted = true;
    video.loop = true;
@@ -253,12 +261,24 @@ console.log('video ', video);
 	}
 
 
+
+  var geometry = new THREE.PlaneGeometry( 50, 50 );
+
+  var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+  var mid = new THREE.Mesh( geometry, material );
+  mid.position.y = -0.01;
+  mid.rotation.x = Math.PI / 2;
+  scene.add( mid );
+
   let backGeo = new THREE.PlaneBufferGeometry( 40, 40 );
   let backPlane = new THREE.Mesh(backGeo,planeMaterial);
-  backPlane.position.y = 0;
+  backPlane.position.y = -0.02
   backPlane.rotation.x = Math.PI / 2;
   backPlane.rotation.z = Math.PI;
   group.add(backPlane);
+
+
+
 
 
   initialPos.forEach((el, i)=> {
@@ -317,7 +337,20 @@ console.log('video ', video);
   solveButton.addEventListener('click', onSolveClick, true);
   randomButton.addEventListener('click', onRandomClick, true);
   originalButton.addEventListener('click', onOriginalClick, true);
+  changeButton.addEventListener('click', onChangeClick, true);
 
+  function onChangeClick() {
+    console.log('on change clicked');
+    videoIdx++;
+
+    if (videoIdx > 2) {
+      videoIdx = 0;
+    }
+    videoImageContext.clearRect(0,0,480,480);
+    video.src = videos[videoIdx];
+    video.play();
+
+  }
 
   function onSolveClick() {
     console.log('solve clicked');
@@ -357,19 +390,19 @@ console.log('video ', video);
   function onOriginalClick() {
     console.log('original clicked');
 
-    originalClicked = true;
+    originalMode = !originalMode
 
 
 
-    pieces.forEach((piece)=> {
-
-      let pos = piece.pos;
-      piece.position.x = (pos%4)*10 -15;
-      piece.position.z = Math.floor(pos/4)*10 - 15;
-
-
-
-    });
+    // pieces.forEach((piece)=> {
+    //
+    //   let pos = piece.pos;
+    //   piece.position.x = (pos%4)*10 -15;
+    //   piece.position.z = Math.floor(pos/4)*10 - 15;
+    //
+    //
+    //
+    // });
 
     console.log('group', group);
   }
@@ -541,7 +574,7 @@ function animate() {
     texture.needsUpdate = true;
   }
  var timer = performance.now();
-  if ( originalClicked ) {
+  if ( originalMode ) {
     console.log('clicked here', group.rotation.y);
     group.rotation.z += timer * 0.000001;
 
