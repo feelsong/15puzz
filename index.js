@@ -310,7 +310,7 @@ console.log('video ', video);
   var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w ] );
 
 
- var clip = new THREE.AnimationClip( 'Action', 1, [ quaternionKF ] );
+ var clip = new THREE.AnimationClip( 'Action', 3, [ quaternionKF ] );
 
   var mixer = new THREE.AnimationMixer( group );
 
@@ -420,10 +420,14 @@ console.log('video ', video);
     //   action.reset()
     //
     // }
-
+    action.loop = true;
     action.setLoop( THREE.LoopOnce );
+
     action.clampWhenFinished = true;
     action.timeScale = originalMode? 1: -1;
+    if (originalMode) {
+      action.paused = false;
+    }
     console.log('action.timeScale',   action.timeScale);
       originalMode = !originalMode;
     action.play();
