@@ -85,7 +85,7 @@ const solveButton = document.getElementById('solve');
 const originalButton = document.getElementById('original');
 const changeButton = document.getElementById('change');
 
-let originalMode = false;
+let originalMode = true;
 let mixers = [];
 
 function solved(arr) {
@@ -275,7 +275,7 @@ console.log('video ', video);
   let backPlane = new THREE.Mesh(backGeo,planeMaterial);
   backPlane.position.y = -0.02
   backPlane.rotation.x = Math.PI / 2;
-  backPlane.rotation.z = Math.PI;
+  backPlane.rotation.z = Math.PI *0.5;
   group.add(backPlane);
 
 
@@ -301,15 +301,16 @@ console.log('video ', video);
 
   //
 
-  var xAxis = new THREE.Vector3( 0, 0, 1 );
+  var xAxis = new THREE.Vector3( 0.7071, 0,  0.7071);
 
   var qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
   var qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
 
-  var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+  //var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+  var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w ] );
 
 
- var clip = new THREE.AnimationClip( 'Action', 3, [ quaternionKF ] );
+ var clip = new THREE.AnimationClip( 'Action', 1, [ quaternionKF ] );
 
   var mixer = new THREE.AnimationMixer( group );
 
@@ -409,26 +410,24 @@ console.log('video ', video);
   }
 
   function onOriginalClick() {
-    console.log('original clicked');
+    console.log('original mode', originalMode);
 
-
+    // // console.log('timescale',   action.timeScale );
+    // console.log(' !originalMode? 1: -1',    originalMode? 1: -1 );
     let action = mixers[0].clipAction(clip);
+    // if (originalMode) {
+    //   console.log('resettting');
+    //   action.reset()
+    //
+    // }
+
     action.setLoop( THREE.LoopOnce );
-    //action.clampWhenFinished = true;
-    action.play().reset();
+    action.clampWhenFinished = true;
+    action.timeScale = originalMode? 1: -1;
+    console.log('action.timeScale',   action.timeScale);
+      originalMode = !originalMode;
+    action.play();
 
-
-    // pieces.forEach((piece)=> {
-    //
-    //   let pos = piece.pos;
-    //   piece.position.x = (pos%4)*10 -15;
-    //   piece.position.z = Math.floor(pos/4)*10 - 15;
-    //
-    //
-    //
-    // });
-
-    console.log('group', group);
   }
 
 	function onclick() {
