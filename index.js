@@ -26,6 +26,7 @@ let videos = [videoSource, videoSource2, videoSource3];
 var video;
 var texture;
 var videoImageContext;
+let clock;
 
 
 const uvMap16 = [
@@ -85,7 +86,7 @@ const originalButton = document.getElementById('original');
 const changeButton = document.getElementById('change');
 
 let originalMode = false;
-
+let mixers = [];
 
 function solved(arr) {
   var a  = arr.map((x)=> {
@@ -268,7 +269,7 @@ console.log('video ', video);
   var mid = new THREE.Mesh( geometry, material );
   mid.position.y = -0.01;
   mid.rotation.x = Math.PI / 2;
-  scene.add( mid );
+  group.add( mid );
 
   let backGeo = new THREE.PlaneBufferGeometry( 40, 40 );
   let backPlane = new THREE.Mesh(backGeo,planeMaterial);
@@ -296,6 +297,26 @@ console.log('video ', video);
 
   console.log('_blank', _blank);
   console.log('pieces', pieces);
+
+
+  //
+
+  var xAxis = new THREE.Vector3( 0, 0, 1 );
+
+  var qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
+  var qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
+
+  var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
+
+
+ var clip = new THREE.AnimationClip( 'Action', 3, [ quaternionKF ] );
+
+  var mixer = new THREE.AnimationMixer( group );
+
+ mixers.push(mixer);
+
+//clock
+ clock = new THREE.Clock();
 
 
 	// postprocessing
@@ -390,8 +411,11 @@ console.log('video ', video);
   function onOriginalClick() {
     console.log('original clicked');
 
-    originalMode = !originalMode
 
+    let action = mixers[0].clipAction(clip);
+    action.setLoop( THREE.LoopOnce );
+    //action.clampWhenFinished = true;
+    action.play().reset();
 
 
     // pieces.forEach((piece)=> {
@@ -574,9 +598,15 @@ function animate() {
     texture.needsUpdate = true;
   }
  var timer = performance.now();
-  if ( originalMode ) {
-    console.log('clicked here', group.rotation.y);
-    group.rotation.z += timer * 0.000001;
+
+
+  var mixerUpdateDelta = clock.getDelta();
+
+      // Update all the animation frames
+
+  for ( var i = 0; i < mixers.length; ++ i ) {
+
+    mixers[ i ].update( mixerUpdateDelta );
 
   }
 
