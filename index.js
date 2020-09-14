@@ -230,7 +230,7 @@ console.log('video ', video);
   var geometry = new THREE.PlaneGeometry( 50, 50 );
   var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
   var mid = new THREE.Mesh( geometry, material );
-  mid.position.y = -0.01;
+  mid.position.y = -0.05;
   mid.rotation.x = Math.PI / 2;
   group.add( mid );
 
@@ -239,6 +239,7 @@ console.log('video ', video);
   backPlane.position.y = -0.1;
   backPlane.rotation.x = Math.PI / 2;
   backPlane.rotation.z = Math.PI *0.5;
+  backPlane.visible = false;
   group.add(backPlane);
 
   initialPos.forEach((el, i)=> {
@@ -318,32 +319,8 @@ console.log('video ', video);
 
     checkIntersection();
     onclick();
-    //
-    // raycaster.setFromCamera(mouse, camera);
-    // const intersects = raycaster.intersectObjects(yourObject3D);
-}
 
-  // var originalHam = new Hammer(originalButton, {});
-  // originalHam.on('tap', onOriginalClick);
-  //
-  //
-  // var randomHam = new Hammer(randomButton, {});
-  // randomHam.on('tap', onRandomClick);
-  //
-  // var solveHam = new Hammer(solveButton, {});
-  // solveHam.on('tap', onSolveClick);
-  //
-  // var changeHam = new Hammer(changeButton, {});
-  // changeHam.on('tap', onChangeClick);
-
-  //
-  // var domHam = new Hammer.Manager(renderer.domElement);
-  // domHam.on('tap', (event)=> {
-  //   console.log('tap',event);
-  //
-  //   onclick(event.srcEvent);
-  // });
-  //
+  }
 
 
   function onChangeClick() {
