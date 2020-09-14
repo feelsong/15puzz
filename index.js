@@ -7,10 +7,6 @@ import { RenderPass } from './three.js/examples/jsm/postprocessing/RenderPass.js
 import { ShaderPass } from './three.js/examples/jsm/postprocessing/ShaderPass.js';
 import { FXAAShader } from './three.js/examples/jsm/shaders/FXAAShader.js';
 
-const txtfile = require('./grid-sprite.jpg');
-const txtfile2 = require('./meeko.jpg');
-const txtfile3 = require('./tri_pattern.jpg');
-
 const videoSource = require('./saved.mp4');
 const videoSource2 = require('./1.mp4');
 const videoSource3 = require('./2.mp4');
