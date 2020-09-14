@@ -1,11 +1,11 @@
 import * as THREE from './three.js/build/three.module.js';
 import { OrbitControls } from './three.js/examples/jsm/controls/OrbitControls.js';
-import { OBJLoader } from './three.js/examples/jsm/loaders/OBJLoader.js';
 import { EffectComposer } from './three.js/examples/jsm/postprocessing/EffectComposer.js';
 import { OutlinePass } from './three.js/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from './three.js/examples/jsm/postprocessing/RenderPass.js';
 import { ShaderPass } from './three.js/examples/jsm/postprocessing/ShaderPass.js';
 import { FXAAShader } from './three.js/examples/jsm/shaders/FXAAShader.js';
+
 
 const videoSource = require('./saved.mp4');
 const videoSource2 = require('./1.mp4');
@@ -113,8 +113,6 @@ function init() {
 
   initialPos = getRandomPos();
   console.log('initial Pos', initialPos);
-
-
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
@@ -123,37 +121,26 @@ function init() {
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.shadowMap.enabled = true;
-	// todo - support pixelRatio in this demo
+
+
 	renderer.setSize( width, height );
 	document.body.appendChild( renderer.domElement );
 
 	scene = new THREE.Scene();
-	scene.add(new THREE.AxesHelper(5));
 
   var x_axis = new THREE.Vector3( 1, 0, 0 );
   var quaternion = new THREE.Quaternion;
 
 	camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 200 );
 	camera.position.set(0 , 100, 0 );
-  // camera.rotation.y = - Math.PI / 2;
-  //
-  // camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, rotation_speed));
-  // camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, rotation_speed));
-
-  // console.log('camera', camera.rotation);
 	camera.lookAt(0,0,0);
 
 	controls = new OrbitControls( camera, renderer.domElement );
-
-
-
 	controls.minDistance = 5;
 	controls.maxDistance = 100;
 	controls.enablePan = false;
 	controls.enableDamping = true;
 	controls.dampingFactor = 0.05;
-
-	//
 
 	scene.add( new THREE.AmbientLight( 0xaaaaaa, 0.2 ) );
 
@@ -187,7 +174,9 @@ function init() {
   // video.type = ' video/ogg; codecs="theora, vorbis" ';
 console.log('video ', video);
   video.autoplay = true;
+
    video.src = videos[2];
+
    video.load(); // must call after setting/changing source
    video.muted = true;
    video.loop = true;
@@ -205,7 +194,6 @@ console.log('video ', video);
 
   texture.minFilter = THREE.LinearFilter;
   texture.magFilter = THREE.LinearFilter;
-  //texture.needsUpdate = true;
 
 	var planeMaterial = new THREE.MeshBasicMaterial( { map: texture, morphTargets: true, transparent: false} );
 
@@ -213,11 +201,7 @@ console.log('video ', video);
 	for (let i = 0; i < 4; i ++ ) {
 		for (let j = 0; j < 4; j ++ ) {
 
-
-          // coord.push({z: 10 * i + 1 * i - 16.5 , x: 10*j+1*j - 16.5});
-
-          coord.push({z: 10 * i - 15 , x: 10*j - 15});
-
+        coord.push({z: 10 * i - 15 , x: 10*j - 15});
 
 				if (!(i===3 && j===3)) {
 					let pGeo = new THREE.PlaneBufferGeometry( 10, 10 );
@@ -243,10 +227,7 @@ console.log('video ', video);
 		}
 	}
 
-
-
   var geometry = new THREE.PlaneGeometry( 50, 50 );
-
   var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
   var mid = new THREE.Mesh( geometry, material );
   mid.position.y = -0.01;
@@ -255,14 +236,10 @@ console.log('video ', video);
 
   let backGeo = new THREE.PlaneBufferGeometry( 40, 40 );
   let backPlane = new THREE.Mesh(backGeo,planeMaterial);
-  backPlane.position.y = -0.02
+  backPlane.position.y = -0.1;
   backPlane.rotation.x = Math.PI / 2;
   backPlane.rotation.z = Math.PI *0.5;
   group.add(backPlane);
-
-
-
-
 
   initialPos.forEach((el, i)=> {
     if (el !== 15) {
@@ -312,36 +289,62 @@ console.log('video ', video);
 	outlinePass = new OutlinePass( new THREE.Vector2( window.innerWidth, window.innerHeight ), scene, camera );
 	composer.addPass( outlinePass );
 
-	var onLoad = function ( texture ) {
-
-		outlinePass.patternTexture = texture;
-		texture.wrapS = THREE.RepeatWrapping;
-		texture.wrapT = THREE.RepeatWrapping;
-
-	};
-
-	var loader = new THREE.TextureLoader();
-
-	loader.load( 'textures/tri_pattern.jpg', onLoad );
 
 	effectFXAA = new ShaderPass( FXAAShader );
 	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
 	composer.addPass( effectFXAA );
 
 
-
-
-
 	window.addEventListener( 'resize', onWindowResize, false );
 
 	window.addEventListener( 'mousemove', onTouchMove );
 	window.addEventListener( 'touchmove', onTouchMove );
+
 	renderer.domElement.addEventListener("click", onclick, true);
 
   solveButton.addEventListener('click', onSolveClick, true);
   randomButton.addEventListener('click', onRandomClick, true);
   originalButton.addEventListener('click', onOriginalClick, true);
   changeButton.addEventListener('click', onChangeClick, true);
+
+
+  renderer.domElement.addEventListener('touchend', onDocumentTouchEnd, false);
+
+  function onDocumentTouchEnd(event) {
+    event.preventDefault();
+
+    mouse.x = (event.changedTouches[0].clientX / window.innerWidth) * 2 - 1;
+    mouse.y = -(event.changedTouches[0].clientY / window.innerHeight) * 2 + 1;
+
+    checkIntersection();
+    onclick();
+    //
+    // raycaster.setFromCamera(mouse, camera);
+    // const intersects = raycaster.intersectObjects(yourObject3D);
+}
+
+  // var originalHam = new Hammer(originalButton, {});
+  // originalHam.on('tap', onOriginalClick);
+  //
+  //
+  // var randomHam = new Hammer(randomButton, {});
+  // randomHam.on('tap', onRandomClick);
+  //
+  // var solveHam = new Hammer(solveButton, {});
+  // solveHam.on('tap', onSolveClick);
+  //
+  // var changeHam = new Hammer(changeButton, {});
+  // changeHam.on('tap', onChangeClick);
+
+  //
+  // var domHam = new Hammer.Manager(renderer.domElement);
+  // domHam.on('tap', (event)=> {
+  //   console.log('tap',event);
+  //
+  //   onclick(event.srcEvent);
+  // });
+  //
+
 
   function onChangeClick() {
     console.log('on change clicked');
@@ -416,11 +419,21 @@ console.log('video ', video);
 
   }
 
-	function onclick() {
-    // console.log('selectedObjects', selectedObjects)
-		console.log('clicked!', selectedObjects ? selectedObjects[0].data : null);
+	function onclick(srcEvent) {
+    console.log('selectedObjects', selectedObjects)
+
+
+		console.log('clicked!', selectedObjects[0] ? selectedObjects[0].data : null);
 		console.log('_blank!', _blank);
 		// get some data
+    if (selectedObjects.length ===0) {
+
+        console.log('zero out');
+        onTouchMove(srcEvent);
+        // checkIntersection();
+    }
+
+
 		let index = selectedObjects[0].data;
 		let pos = selectedObjects[0].pos;
 
@@ -506,7 +519,7 @@ console.log('video ', video);
 
 
 	function onTouchMove( event ) {
-
+    console.log('touch move', event);
 		var x, y;
 
 		if ( event.changedTouches ) {
