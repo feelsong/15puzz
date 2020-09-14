@@ -1,10 +1,6 @@
 import * as THREE from './three.js/build/three.module.js';
-
-
 import { OrbitControls } from './three.js/examples/jsm/controls/OrbitControls.js';
 import { OBJLoader } from './three.js/examples/jsm/loaders/OBJLoader.js';
-
-
 import { EffectComposer } from './three.js/examples/jsm/postprocessing/EffectComposer.js';
 import { OutlinePass } from './three.js/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from './three.js/examples/jsm/postprocessing/RenderPass.js';
@@ -15,19 +11,16 @@ const txtfile = require('./grid-sprite.jpg');
 const txtfile2 = require('./meeko.jpg');
 const txtfile3 = require('./tri_pattern.jpg');
 
-
-
 const videoSource = require('./saved.mp4');
 const videoSource2 = require('./1.mp4');
 const videoSource3 = require('./2.mp4');
+
 let videoIdx = 0;
 let videos = [videoSource, videoSource2, videoSource3];
-
 var video;
 var texture;
 var videoImageContext;
 let clock;
-
 
 const uvMap16 = [
     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
@@ -51,21 +44,14 @@ const uvMap16 = [
 const uvTo = [0,1,4,5,2,3,6,7,8,9,12,13,10,11,14,15];
 
 let _blank = 15;
-
-
-
 var container, stats;
 var camera, scene, renderer, controls;
 var raycaster = new THREE.Raycaster();
-
 var mouse = new THREE.Vector2();
 var selectedObjects = [];
-
 var composer, effectFXAA, outlinePass;
 var obj3d = new THREE.Object3D();
-
 var group = new THREE.Group();
-
 var pieces = [];
 let initialPos = [];
 
