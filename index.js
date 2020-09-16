@@ -11,6 +11,9 @@ const videoSource = require('./saved.mp4');
 const videoSource2 = require('./1.mp4');
 const videoSource3 = require('./2.mp4');
 
+const audioSrc = require('./tap2.mp3');
+
+
 let videoIdx = 0;
 let videos = [videoSource, videoSource2, videoSource3];
 var video;
@@ -18,26 +21,49 @@ var texture;
 var videoImageContext;
 let clock;
 
-const uvMap16 = [
-    [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
-    [0.25, 1, 0.5, 1, 0.25, 0.75, 0.5, 0.75],
-    [0, 0.75, 0.25, 0.75, 0, 0.5, 0.25, 0.5],
-    [0.25, 0.75, 0.5, 0.75, 0.25, 0.5, 0.5, 0.5],
-    [0.5, 1, 0.75, 1, 0.5, 0.75, 0.75, 0.75],
-    [0.75, 1, 1, 1, 0.75, 0.75, 1, 0.75],
-    [0.5, 0.75, 0.75, 0.75, 0.5, 0.5, 0.75, 0.5],
-    [0.75, 0.75, 1, 0.75, 0.75, 0.5, 1, 0.5],
-    [0, 0.5, 0.25, 0.5, 0, 0.25, 0.25, 0.25],
-    [0.25, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.25],
-    [0, 0.25, 0.25, 0.25, 0, 0, 0.25, 0],
-    [0.25, 0.25, 0.5, 0.25, 0.25, 0, 0.5, 0],
-    [0.5, 0.5, 0.75, 0.5, 0.5, 0.25, 0.75, 0.25],
-    [0.75, 0.5, 1, 0.5, 0.75, 0.25, 1, 0.25],
-    [0.5, 0.25, 0.75, 0.25, 0.5, 0, 0.75, 0],
-    [0.75, 0.25, 1, 0.25, 0.75, 0, 1, 0]
+// const uvMap16 = [
+//     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
+//     [0.25, 1, 0.5, 1, 0.25, 0.75, 0.5, 0.75],
+//     [0, 0.75, 0.25, 0.75, 0, 0.5, 0.25, 0.5],
+//     [0.25, 0.75, 0.5, 0.75, 0.25, 0.5, 0.5, 0.5],
+//     [0.5, 1, 0.75, 1, 0.5, 0.75, 0.75, 0.75],
+//     [0.75, 1, 1, 1, 0.75, 0.75, 1, 0.75],
+//     [0.5, 0.75, 0.75, 0.75, 0.5, 0.5, 0.75, 0.5],
+//     [0.75, 0.75, 1, 0.75, 0.75, 0.5, 1, 0.5],
+//     [0, 0.5, 0.25, 0.5, 0, 0.25, 0.25, 0.25],
+//     [0.25, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.25],
+//     [0, 0.25, 0.25, 0.25, 0, 0, 0.25, 0],
+//     [0.25, 0.25, 0.5, 0.25, 0.25, 0, 0.5, 0],
+//     [0.5, 0.5, 0.75, 0.5, 0.5, 0.25, 0.75, 0.25],
+//     [0.75, 0.5, 1, 0.5, 0.75, 0.25, 1, 0.25],
+//     [0.5, 0.25, 0.75, 0.25, 0.5, 0, 0.75, 0],
+//     [0.75, 0.25, 1, 0.25, 0.75, 0, 1, 0]
+// ];
+
+// const uvMap16 = [
+//     [0, 1, 0.24875, 1, 0, 0.75125, 0.24875, 0.75125],
+//     [0.25125, 1, 0.49875, 1, 0.25125, 0.75125, 0.49875, 0.75125],
+//     [0.50125, 1, 0.74875, 1, 0.50125, 0.75125, 0.74875, 0.75125],
+//     [0.75125, 1, 1, 1, 0.75125, 0.75125, 1, 0.75125],
+//     [0, 0.74875, 0.24875, 0.74875, 0, 0.50125, 0.24875, 0.50125],
+//     [0.25125, 0.74875, 0.49875, 0.74875, 0.25125, 0.50125, 0.49875, 0.50125],
+//     [0.50125, 0.74875, 0.74875, 0.74875, 0.50125, 0.50125, 0.74875, 0.50125],
+//     [0.75125, 0.74875, 1, 0.74875, 0.75125, 0.50125, 1, 0.50125],
+//     [0, 0.49875, 0.24875, 0.49875, 0, 0.25125, 0.24875, 0.25125],
+//     [0.25125, 0.49875, 0.49875, 0.49875, 0.25125, 0.25125, 0.49875, 0.25125],
+//     [0.50125, 0.49875, 0.74875, 0.49875, 0.50125, 0.25125, 0.74875, 0.25125],
+//     [0.75125, 0.49875, 1, 0.49875, 0.75125, 0.25125, 1, 0.25125],
+//     [0, 0.24875, 0.24875, 0.24875, 0, 0, 0.24875, 0],
+//     [0.25125, 0.24875, 0.49875, 0.24875, 0.25125, 0, 0.49875, 0],
+//     [0.50125, 0.24875, 0.74875, 0.24875, 0.50125, 0, 0.74875, 0],
+//     [0.75125, 0.24875, 1, 0.24875, 0.75125, 0, 1, 0]
+// ];
+
+const uvMap16 =[
+  [0,1,0.24375,1,0,0.75625,0.24375,0.75625],[0.25625,1,0.49375,1,0.25625,0.75625,0.49375,0.75625],[0.50625,1,0.74375,1,0.50625,0.75625,0.74375,0.75625],[0.75625,1,1,1,0.75625,0.75625,1,0.75625],[0,0.74375,0.24375,0.74375,0,0.50625,0.24375,0.50625],[0.25625,0.74375,0.49375,0.74375,0.25625,0.50625,0.49375,0.50625],[0.50625,0.74375,0.74375,0.74375,0.50625,0.50625,0.74375,0.50625],[0.75625,0.74375,1,0.74375,0.75625,0.50625,1,0.50625],[0,0.49375,0.24375,0.49375,0,0.25625,0.24375,0.25625],[0.25625,0.49375,0.49375,0.49375,0.25625,0.25625,0.49375,0.25625],[0.50625,0.49375,0.74375,0.49375,0.50625,0.25625,0.74375,0.25625],[0.75625,0.49375,1,0.49375,0.75625,0.25625,1,0.25625],[0,0.24375,0.24375,0.24375,0,0,0.24375,0],[0.25625,0.24375,0.49375,0.24375,0.25625,0,0.49375,0],[0.50625,0.24375,0.74375,0.24375,0.50625,0,0.74375,0],[0.75625,0.24375,1,0.24375,0.75625,0,1,0]
 ];
 
-const uvTo = [0,1,4,5,2,3,6,7,8,9,12,13,10,11,14,15];
+// const uvTo = [0,1,4,5,2,3,6,7,8,9,12,13,10,11,14,15];
 
 let _blank = 15;
 var container, stats;
@@ -51,15 +77,6 @@ var group = new THREE.Group();
 var pieces = [];
 let initialPos = [];
 
-var params = {
-	edgeStrength: 3.0,
-	edgeGlow: 0.0,
-	edgeThickness: 1.0,
-	pulsePeriod: 0,
-	rotate: false,
-	usePatternTexture: false
-};
-
 var coord = [];
 
 const randomButton = document.getElementById('random');
@@ -67,23 +84,23 @@ const solveButton = document.getElementById('solve');
 const originalButton = document.getElementById('original');
 const changeButton = document.getElementById('change');
 
+
+const tabSound = new Audio(audioSrc)
+tabSound.volume = 0.2;
+
 let originalMode = true;
 let mixers = [];
 
 function solved(arr) {
   var a  = arr.map((x)=> {
-
       //pos === data
       return x.pos === x.data;
   })
-
-
 
   return !a.filter(x=> false).length;
 }
 
 function reset() {
-
 
 }
 
@@ -109,15 +126,13 @@ init();
 animate();
 
 function init() {
-
-
   initialPos = getRandomPos();
   console.log('initial Pos', initialPos);
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
 	var width = window.innerWidth;
-	var height = window.innerHeight;
+	var height = window.innerHeight-4;
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.shadowMap.enabled = true;
@@ -128,19 +143,16 @@ function init() {
 
 	scene = new THREE.Scene();
 
-  var x_axis = new THREE.Vector3( 1, 0, 0 );
-  var quaternion = new THREE.Quaternion;
-
 	camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 200 );
 	camera.position.set(0 , 100, 0 );
 	camera.lookAt(0,0,0);
 
-	controls = new OrbitControls( camera, renderer.domElement );
-	controls.minDistance = 5;
-	controls.maxDistance = 100;
-	controls.enablePan = false;
-	controls.enableDamping = true;
-	controls.dampingFactor = 0.05;
+	// controls = new OrbitControls( camera, renderer.domElement );
+	// controls.minDistance = 5;
+	// controls.maxDistance = 100;
+	// controls.enablePan = false;
+	// controls.enableDamping = true;
+	// controls.dampingFactor = 0.05;
 
 	scene.add( new THREE.AmbientLight( 0xaaaaaa, 0.2 ) );
 
@@ -168,18 +180,26 @@ function init() {
 
 
   video = document.createElement( 'video' );
+  // console.log('b4 video', video);
+  //      video.playsinline = 'playsinline';
+  //      video['webkit-playsinline'] = true;
            // video.id = 'video';
            // video.type = ' video/ogg; codecs="theora, vorbis" ';
   console.log('video source', videoSource);
   // video.type = ' video/ogg; codecs="theora, vorbis" ';
-console.log('video ', video);
-  video.autoplay = true;
 
+console.log('after video ', video);
+  video.autoplay = true;
+  // video.muted = 'muted';
+  video.loop = true;
+    video.setAttribute('playsinline', true);
+    //video.playsinline = true;
+  video.setAttribute('muted', true);
    video.src = videos[2];
 
+
    video.load(); // must call after setting/changing source
-   video.muted = true;
-   video.loop = true;
+console.log('video ', video);
    video.play();
 
    let videoImage = document.createElement( 'canvas' );
@@ -201,7 +221,8 @@ console.log('video ', video);
 	for (let i = 0; i < 4; i ++ ) {
 		for (let j = 0; j < 4; j ++ ) {
 
-        coord.push({z: 10 * i - 15 , x: 10*j - 15});
+        coord.push({z: 10 * i + 0.5*i - 15.5, x: 10*j + 0.5*j - 15.5});
+        //coord.push({z: 10 * i - 15 , x: 10*j - 15});
 
 				if (!(i===3 && j===3)) {
 					let pGeo = new THREE.PlaneBufferGeometry( 10, 10 );
@@ -219,7 +240,7 @@ console.log('video ', video);
 
             plane.rotation.x = - Math.PI / 2;
 						plane.data = i*4+j;
-						let uv = uvMap16[uvTo[i*4+j]];
+						let uv = uvMap16[i*4+j];
 						var uvs = new Float32Array( uv);
 						pGeo.setAttribute( 'uv', new THREE.BufferAttribute( uvs, 2 ) );
 						pieces.push(plane);
@@ -228,7 +249,7 @@ console.log('video ', video);
 	}
 
   var geometry = new THREE.PlaneGeometry( 50, 50 );
-  var material = new THREE.MeshBasicMaterial( {color: 0xffff00, side: THREE.DoubleSide} );
+  var material = new THREE.MeshBasicMaterial( {color: 0x505050, side: THREE.DoubleSide} );
   var mid = new THREE.Mesh( geometry, material );
   mid.position.y = -0.05;
   mid.rotation.x = Math.PI / 2;
@@ -330,8 +351,16 @@ console.log('video ', video);
     if (videoIdx > 2) {
       videoIdx = 0;
     }
+
     videoImageContext.clearRect(0,0,480,480);
     video.src = videos[videoIdx];
+    // video.pause();
+    //video.playsinline = true;
+    //video['webkit-playsinline']=true;
+    // video.load();
+    // video.playsinline = 1;
+    // video.load();
+    console.log('video', video);
     video.play();
 
   }
@@ -452,7 +481,7 @@ console.log('video ', video);
 				}
 
 			}
-
+      tabSound.play();
       _blank = pos;
 
 
@@ -483,6 +512,7 @@ console.log('video ', video);
 				}
 
 			}
+      tabSound.play();
 			_blank = pos;
 		} else {
 
@@ -496,7 +526,7 @@ console.log('video ', video);
 
 
 	function onTouchMove( event ) {
-    console.log('touch move', event);
+    //console.log('touch move', event);
 		var x, y;
 
 		if ( event.changedTouches ) {
@@ -550,7 +580,7 @@ console.log('video ', video);
 function onWindowResize() {
 
 	var width = window.innerWidth;
-	var height = window.innerHeight;
+	var height = window.innerHeight - 4;
 
 	camera.aspect = width / height;
 	camera.updateProjectionMatrix();
@@ -577,8 +607,6 @@ function animate() {
 
   var mixerUpdateDelta = clock.getDelta();
 
-      // Update all the animation frames
-
   for ( var i = 0; i < mixers.length; ++ i ) {
 
     mixers[ i ].update( mixerUpdateDelta );
@@ -588,16 +616,6 @@ function animate() {
 
 	requestAnimationFrame( animate );
 
-	//stats.begin();
-
-
-
-
-  //
-	// controls.update();
-
 	composer.render();
-
-//	stats.end();
 
 }
