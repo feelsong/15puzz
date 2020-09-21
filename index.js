@@ -63,6 +63,7 @@ const uvMap16 =[
   [0,1,0.24375,1,0,0.75625,0.24375,0.75625],[0.25625,1,0.49375,1,0.25625,0.75625,0.49375,0.75625],[0.50625,1,0.74375,1,0.50625,0.75625,0.74375,0.75625],[0.75625,1,1,1,0.75625,0.75625,1,0.75625],[0,0.74375,0.24375,0.74375,0,0.50625,0.24375,0.50625],[0.25625,0.74375,0.49375,0.74375,0.25625,0.50625,0.49375,0.50625],[0.50625,0.74375,0.74375,0.74375,0.50625,0.50625,0.74375,0.50625],[0.75625,0.74375,1,0.74375,0.75625,0.50625,1,0.50625],[0,0.49375,0.24375,0.49375,0,0.25625,0.24375,0.25625],[0.25625,0.49375,0.49375,0.49375,0.25625,0.25625,0.49375,0.25625],[0.50625,0.49375,0.74375,0.49375,0.50625,0.25625,0.74375,0.25625],[0.75625,0.49375,1,0.49375,0.75625,0.25625,1,0.25625],[0,0.24375,0.24375,0.24375,0,0,0.24375,0],[0.25625,0.24375,0.49375,0.24375,0.25625,0,0.49375,0],[0.50625,0.24375,0.74375,0.24375,0.50625,0,0.74375,0],[0.75625,0.24375,1,0.24375,0.75625,0,1,0]
 ];
 
+
 // const uvTo = [0,1,4,5,2,3,6,7,8,9,12,13,10,11,14,15];
 
 let _blank = 15;
@@ -74,6 +75,7 @@ var selectedObjects = [];
 var composer, effectFXAA, outlinePass;
 var obj3d = new THREE.Object3D();
 var group = new THREE.Group();
+var pieceGroup = new THREE.Group();
 var pieces = [];
 let initialPos = [];
 
@@ -198,8 +200,12 @@ console.log('after video ', video);
    video.src = videos[2];
 
 
-   video.load(); // must call after setting/changing source
+  // must call after setting/changing source
 console.log('video ', video);
+
+
+
+ video.load();
    video.play();
 
    let videoImage = document.createElement( 'canvas' );
@@ -269,12 +275,14 @@ console.log('video ', video);
       currPiece.pos = i;
       currPiece.position.x = coord[i].x;
       currPiece.position.z = coord[i].z;
-      group.add(currPiece);
+      pieceGroup.add(currPiece);
     } else {
       _blank = i;
     }
 
   })
+
+  group.add(pieceGroup);
 
   console.log('_blank', _blank);
   console.log('pieces', pieces);
@@ -402,7 +410,7 @@ console.log('video ', video);
 
   function onOriginalClick() {
     console.log('original mode', originalMode);
-
+    outlinePass.selectedObjects = [];
     // // console.log('timescale',   action.timeScale );
     // console.log(' !originalMode? 1: -1',    originalMode? 1: -1 );
     let action = mixers[0].clipAction(clip);
@@ -559,7 +567,7 @@ console.log('video ', video);
 
 		raycaster.setFromCamera( mouse, camera );
 
-		var intersects = raycaster.intersectObject( scene, true );
+		var intersects = raycaster.intersectObject( pieceGroup, true );
 
 		if ( intersects.length > 0 ) {
 
@@ -569,7 +577,7 @@ console.log('video ', video);
 
 		} else {
 
-			// outlinePass.selectedObjects = [];
+			outlinePass.selectedObjects = [];
 
 		}
 
