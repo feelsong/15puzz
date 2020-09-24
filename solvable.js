@@ -38,14 +38,10 @@ function findNumberOfInversion(input) {
 }
 function findSolvable(input) {
   var numInversion = findNumberOfInversion(input);
-  // console.log('numInversion', numInversion);
   var evenInversion = !(numInversion % 2) ;
-  // console.log('numInversion', numInversion, 'is Even?', evenInversion);
   if (findBlankRowIfEven(input)) {
-    // console.log('position X = even');
     return !evenInversion;
   } else {
-    // console.log('position X = odd');
     return evenInversion;
   }
 }

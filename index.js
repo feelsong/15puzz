@@ -91,7 +91,7 @@ const originalButton = document.getElementById('original');
 const changeButton = document.getElementById('change');
 
 
-const tabSound = new Audio(audioSrc)
+const tabSound = new Audio(audioSrc);
 tabSound.volume = 0.2;
 
 let originalMode = true;
@@ -113,8 +113,16 @@ function reset() {
 }
 
 function getRandomPos() {
-  let arr = shuffleArray([...Array(16).keys()]);
-  return shuffleArray(arr);
+  let num = 0;
+  let arr = [];
+  do {
+    num += 1;
+    arr = shuffleArray([...Array(16).keys()]);
+    arr = shuffleArray(arr);
+  } while (findSolvable(arr))
+
+  console.log('num of attempts', num);
+  return arr;
 }
 
 function shuffleArray(array) {
@@ -128,6 +136,36 @@ function shuffleArray(array) {
     return array;
 }
 
+function findBlankRowIfEven(input) {
+  var index = input.indexOf(15);
+  var row = Math.floor(index/4);
+  return !(row%2);
+}
+
+function findNumberOfInversion(input) {
+  input = input.filter(i => i !== 15)
+  let l = input.length;
+  let numOfInversion = 0;
+  input.forEach((el,i) => {
+    if (i!==l-1) {
+      for (let j = i+1; j < l;  j++) {
+        if (el > input[j]) {
+          numOfInversion++;
+        }
+      }
+    }
+  });
+  return numOfInversion;
+}
+function findSolvable(input) {
+  var numInversion = findNumberOfInversion(input);
+  var evenInversion = !(numInversion % 2) ;
+  if (findBlankRowIfEven(input)) {
+    return !evenInversion;
+  } else {
+    return evenInversion;
+  }
+}
 
 
 init();
@@ -136,6 +174,18 @@ animate();
 function init() {
   initialPos = getRandomPos();
   console.log('initial Pos', initialPos);
+
+
+  video = document.createElement( 'video' );
+  video.src = videos[2];
+  video.muted = true;
+  video.setAttribute('playsinline', true);
+  video.loop = true;
+
+  video.load();
+  video.play();
+  // setTimeout(()=>video.play(),1000);
+
 	container = document.createElement( 'div' );
 	document.body.appendChild( container );
 
@@ -155,12 +205,6 @@ function init() {
 	camera.position.set(0 , 100, 0 );
 	camera.lookAt(0,0,0);
 
-	// controls = new OrbitControls( camera, renderer.domElement );
-	// controls.minDistance = 5;
-	// controls.maxDistance = 100;
-	// controls.enablePan = false;
-	// controls.enableDamping = true;
-	// controls.dampingFactor = 0.05;
 
 	scene.add( new THREE.AmbientLight( 0xaaaaaa, 0.2 ) );
 
@@ -185,32 +229,6 @@ function init() {
 
 	var material = new THREE.MeshPhongMaterial( { color: 0xffaaff } );
 
-  video = document.createElement( 'video' );
-  // console.log('b4 video', video);
-  //      video.playsinline = 'playsinline';
-  //      video['webkit-playsinline'] = true;
-           // video.id = 'video';
-           // video.type = ' video/ogg; codecs="theora, vorbis" ';
-  console.log('video source', videoSource);
-  // video.type = ' video/ogg; codecs="theora, vorbis" ';
-
-console.log('after video ', video);
-  video.autoplay = true;
-  // video.muted = 'muted';
-  video.loop = true;
-    video.setAttribute('playsinline', true);
-    //video.playsinline = true;
-  video.setAttribute('muted', true);
-   video.src = videos[2];
-
-
-  // must call after setting/changing source
-console.log('video ', video);
-
-
-
-  video.load();
-   video.play();
 
    let videoImage = document.createElement( 'canvas' );
     videoImage.width = 480;
@@ -303,7 +321,7 @@ console.log('video ', video);
  var xAxis = new THREE.Vector3( 0.7071067690849304, 0, 0.7071067690849304);
  var qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis,  0);
  var qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis,  Math.PI);
- var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w] );
+ var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w]);
  clip = new THREE.AnimationClip( null , 1, [ quaternionKF ] );
 
 
@@ -325,6 +343,9 @@ console.log('video ', video);
 	effectFXAA = new ShaderPass( FXAAShader );
 	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
 	composer.addPass( effectFXAA );
+
+  // window.onload = ()=> { console.log('onload');video.play();}
+  // document.addEventListener('DOMContentLoaded', ()=> { console.log('onload');video.play();});
 
 
 	window.addEventListener( 'resize', onWindowResize, false );
@@ -357,19 +378,12 @@ console.log('video ', video);
   function onChangeClick() {
     console.log('on change clicked');
     videoIdx++;
-
     if (videoIdx > 2) {
       videoIdx = 0;
     }
 
     videoImageContext.clearRect(0,0,480,480);
     video.src = videos[videoIdx];
-    // video.pause();
-    //video.playsinline = true;
-    //video['webkit-playsinline']=true;
-    // video.load();
-    // video.playsinline = 1;
-    // video.load();
     console.log('video', video);
     video.play();
 
