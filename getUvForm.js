@@ -7,7 +7,7 @@ function getUV(i) {
 
   let w = 0.25;
   //let diff = 0.1 / 2;
-  let diff = 0.00125; //for 10:0.05 = 0.25:X => x = 0.05*0.25/10;
+  let diff = 0.00625; //for 10:0.05 = 0.25:X => x = 0.05*0.25/10;
 
   let col = i%4;
   let row = parseInt(i/4);
@@ -61,7 +61,7 @@ function getUV(i) {
 
 }
 
-[...Array(16).keys()].map((x)=> getUV(x))
+JSON.stringify([...Array(16).keys()].map((x)=> getUV(x)));
 
 /*
 
@@ -83,5 +83,4 @@ function getUV(i) {
     [0.50125, 0.24875, 0.74875, 0.24875, 0.50125, 0, 0.74875, 0],
     [0.75125, 0.24875, 1, 0.24875, 0.75125, 0, 1, 0]
 ]
-
 */
