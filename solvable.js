@@ -43,8 +43,9 @@ function findNumberOfInversion(input) {
       for (let j = i+1; j < l;  j++) {
         console.log('j', j);
         console.log('index[j]', input[j]);
-        if (el < input[j]) {
+        if (el > input[j]) {
           numOfInversion++;
+
         }
       }
     }
@@ -80,3 +81,5 @@ function findSolvable(input) {
 
 
 findNumberOfInversion([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
+findNumberOfInversion([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
+findNumberOfInversion([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4])
