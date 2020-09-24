@@ -15,71 +15,49 @@ function shuffleArray(array) {
     return array;
 }
 
-
-var input = getRandomPos();
-console.log('input', input);
-
-//input => seed  [10, 12, 3, 9, 2, 4, 6, 13, 5, 14, 8, 0, 15, 7, 1, 11]
-
-
-
 function findBlankRowIfEven(input) {
   var index = input.indexOf(15);
-  var row = Math.floor(index/3);
-  return !row%2;
+  var row = Math.floor(index/4);
+  return !(row%2);
 }
 
-
-
 function findNumberOfInversion(input) {
-
   input = input.filter(i => i !== 15)
   let l = input.length;
   let numOfInversion = 0;
   input.forEach((el,i) => {
-    console.log('el', el);
-    console.log('i', i);
     if (i!==l-1) {
       for (let j = i+1; j < l;  j++) {
-        console.log('j', j);
-        console.log('index[j]', input[j]);
         if (el > input[j]) {
           numOfInversion++;
-
         }
       }
     }
-
   });
-
   return numOfInversion;
 }
-
 function findSolvable(input) {
-  input = input.filter(i => i !== 15)
-    if findBlankRowIfEven(input) {
-      //if blank is even
-      // inversion number needs to be odd
-
-
-    } else {
-      //if blank is odd
-      // inversion number needs to be even
-
-
-
-    }
-
-
-
-
+  var numInversion = findNumberOfInversion(input);
+  // console.log('numInversion', numInversion);
+  var evenInversion = !(numInversion % 2) ;
+  // console.log('numInversion', numInversion, 'is Even?', evenInversion);
+  if (findBlankRowIfEven(input)) {
+    // console.log('position X = even');
+    return !evenInversion;
+  } else {
+    // console.log('position X = odd');
+    return evenInversion;
+  }
 }
 
 //[12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]
 //[5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]
 //[2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]
 
-
-findNumberOfInversion([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
-findNumberOfInversion([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
-findNumberOfInversion([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4])
+// findSolvable([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
+// findSolvable([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
+// findSolvable([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]);
+//
+// findBlankRowIfEven([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
+// findBlankRowIfEven([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
+// findBlankRowIfEven([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]);
