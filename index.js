@@ -20,6 +20,7 @@ var video;
 var texture;
 var videoImageContext;
 let clock;
+var clip,clip2;
 
 // const uvMap16 = [
 //     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
@@ -75,11 +76,14 @@ var selectedObjects = [];
 var composer, effectFXAA, outlinePass;
 var obj3d = new THREE.Object3D();
 var group = new THREE.Group();
+group.useQuaternion = true;
 var pieceGroup = new THREE.Group();
 var pieces = [];
 let initialPos = [];
 
 var coord = [];
+
+var initialQ;
 
 const randomButton = document.getElementById('random');
 const solveButton = document.getElementById('solve');
@@ -92,6 +96,8 @@ tabSound.volume = 0.2;
 
 let originalMode = true;
 let mixers = [];
+
+var clip;
 
 function solved(arr) {
   var a  = arr.map((x)=> {
@@ -179,8 +185,6 @@ function init() {
 
 	var material = new THREE.MeshPhongMaterial( { color: 0xffaaff } );
 
-
-
   video = document.createElement( 'video' );
   // console.log('b4 video', video);
   //      video.playsinline = 'playsinline';
@@ -205,7 +209,7 @@ console.log('video ', video);
 
 
 
- video.load();
+  video.load();
    video.play();
 
    let videoImage = document.createElement( 'canvas' );
@@ -254,6 +258,8 @@ console.log('video ', video);
 		}
 	}
 
+  initialQ = group.quaternion.clone();
+
   var geometry = new THREE.PlaneGeometry( 50, 50 );
   var material = new THREE.MeshBasicMaterial( {color: 0x505050, side: THREE.DoubleSide} );
   var mid = new THREE.Mesh( geometry, material );
@@ -266,7 +272,7 @@ console.log('video ', video);
   backPlane.position.y = -0.1;
   backPlane.rotation.x = Math.PI / 2;
   backPlane.rotation.z = Math.PI *0.5;
-  backPlane.visible = false;
+  // backPlane.visible = false;
   group.add(backPlane);
 
   initialPos.forEach((el, i)=> {
@@ -287,23 +293,19 @@ console.log('video ', video);
   console.log('_blank', _blank);
   console.log('pieces', pieces);
 
+  const animationGroup = new THREE.AnimationObjectGroup();
+  animationGroup.add(group);
 
-  //
-
-  var xAxis = new THREE.Vector3( 0.7071, 0,  0.7071);
-
-  var qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis, 0 );
-  var qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis, Math.PI );
-
-  //var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1, 2 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w, qInitial.x, qInitial.y, qInitial.z, qInitial.w ] );
-  var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [ qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w ] );
-
-
- var clip = new THREE.AnimationClip( 'Action', 3, [ quaternionKF ] );
-
-  var mixer = new THREE.AnimationMixer( group );
+  var mixer = new THREE.AnimationMixer( animationGroup );
 
  mixers.push(mixer);
+
+ var xAxis = new THREE.Vector3( 0.7071067690849304, 0, 0.7071067690849304);
+ var qInitial = new THREE.Quaternion().setFromAxisAngle( xAxis,  0);
+ var qFinal = new THREE.Quaternion().setFromAxisAngle( xAxis,  Math.PI);
+ var quaternionKF = new THREE.QuaternionKeyframeTrack( '.quaternion', [ 0, 1 ], [qInitial.x, qInitial.y, qInitial.z, qInitial.w, qFinal.x, qFinal.y, qFinal.z, qFinal.w] );
+ clip = new THREE.AnimationClip( null , 1, [ quaternionKF ] );
+
 
 //clock
  clock = new THREE.Clock();
@@ -413,24 +415,31 @@ console.log('video ', video);
     outlinePass.selectedObjects = [];
     // // console.log('timescale',   action.timeScale );
     // console.log(' !originalMode? 1: -1',    originalMode? 1: -1 );
+    console.log('quaternion', group.quaternion);
+
     let action = mixers[0].clipAction(clip);
-    // if (originalMode) {
-    //   console.log('resettting');
-    //   action.reset()
-    //
-    // }
-    action.loop = true;
-    action.setLoop( THREE.LoopOnce );
 
-    action.clampWhenFinished = true;
-    action.timeScale = originalMode? 1: -1;
+
     if (originalMode) {
-      action.paused = false;
-    }
-    console.log('action.timeScale',   action.timeScale);
-      originalMode = !originalMode;
-    action.play();
+        action.reset();
 
+        action.timeScale = 1;
+        action.setLoop(THREE.LoopOnce);
+        action.clampWhenFinished = true;
+        action.play();
+    } else {
+      action.paused = false;
+      action.timeScale = -1;
+      action.setLoop(THREE.LoopOnce);
+      action.play();
+    }
+
+
+          originalMode = !originalMode;
+
+    // console.log('action.timeScale',   action.timeScale);
+
+    // mesh.userData.mixer = new THREE.AnimationMixer(mesh);
   }
 
 	function onclick(srcEvent) {
