@@ -86,6 +86,7 @@ var coord = [];
 var initialQ;
 
 const randomButton = document.getElementById('random');
+const solveButton = document.getElementById('solve');
 const originalButton = document.getElementById('original');
 const changeButton = document.getElementById('change');
 
@@ -97,6 +98,15 @@ let originalMode = true;
 let mixers = [];
 
 var clip;
+
+function solved(arr) {
+  var a  = arr.map((x)=> {
+      //pos === data
+      return x.pos === x.data;
+  })
+
+  return !a.filter(x=> false).length;
+}
 
 function reset() {
 
@@ -345,6 +355,7 @@ function init() {
 
 	renderer.domElement.addEventListener("click", onclick, true);
 
+  solveButton.addEventListener('click', onSolveClick, true);
   randomButton.addEventListener('click', onRandomClick, true);
   originalButton.addEventListener('click', onOriginalClick, true);
   changeButton.addEventListener('click', onChangeClick, true);
@@ -377,6 +388,22 @@ function init() {
     video.play();
 
   }
+
+  function onSolveClick() {
+    console.log('solve clicked');
+
+    [...Array(15).keys()].forEach((i)=> {
+
+      let currPiece = pieces[i];
+      // console.log('currPiece', currPiece);
+      currPiece.pos = i;
+      currPiece.position.x = coord[i].x;
+      currPiece.position.z = coord[i].z;
+
+    });
+    _blank = 15;
+  }
+
 
   function onRandomClick() {
     console.log('random clicked');
