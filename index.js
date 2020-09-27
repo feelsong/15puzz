@@ -355,7 +355,9 @@ function init() {
 
   renderer.domElement.addEventListener('touchend', onDocumentTouchEnd, false);
 
-
+  // window.addEventListener("orientationchange", function () {
+  //   console.log("The orientation of the screen is: " + window.orientation);
+  // });
 
 
   function onSoundClick() {
@@ -504,9 +506,12 @@ function init() {
 				}
 
 			}
-      tabSound.play();
-      _blank = pos;
+      console.log('sound tab?', sound);
+      if (sound) {
+        tabSound.play();
+      }
 
+      _blank = pos;
 
 		} else if ((pos - _blank) % 4 === 0){
       console.log('same column');
@@ -535,7 +540,9 @@ function init() {
 				}
 
 			}
-      tabSound.play();
+      if (sound) {
+        tabSound.play();
+      }
 			_blank = pos;
 		} else {
 
