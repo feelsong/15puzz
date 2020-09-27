@@ -21,6 +21,7 @@ var texture;
 var videoImageContext;
 let clock;
 var clip,clip2;
+var sound = true;
 
 // const uvMap16 = [
 //     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
@@ -88,7 +89,9 @@ var initialQ;
 const randomButton = document.getElementById('random');
 const originalButton = document.getElementById('original');
 const changeButton = document.getElementById('change');
-
+const soundButton = document.getElementById('sound');
+const soundOnButton = document.getElementById('sound-on');
+const soundOffButton = document.getElementById('sound-off');
 
 const tabSound = new Audio(audioSrc);
 tabSound.volume = 0.2;
@@ -348,9 +351,25 @@ function init() {
   randomButton.addEventListener('click', onRandomClick, true);
   originalButton.addEventListener('click', onOriginalClick, true);
   changeButton.addEventListener('click', onChangeClick, true);
-
+  soundButton.addEventListener('click', onSoundClick, true);
 
   renderer.domElement.addEventListener('touchend', onDocumentTouchEnd, false);
+
+
+
+
+  function onSoundClick() {
+    console.log('clicked', sound);
+    if (sound) {
+      soundOnButton.style.display = 'none';
+      soundOffButton.style.display = 'inline';
+    } else {
+      soundOffButton.style.display = 'none';
+      soundOnButton.style.display = 'inline';
+    }
+    sound = !sound;
+    console.log('sound', sound);
+  }
 
   function onDocumentTouchEnd(event) {
     event.preventDefault();
