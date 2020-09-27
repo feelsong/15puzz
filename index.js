@@ -582,7 +582,7 @@ function init() {
 }
 
 function onWindowResize() {
-
+  console.log('resizing');
 	var width = window.innerWidth;
 	var height = window.innerHeight - 4;
 
