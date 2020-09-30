@@ -7,66 +7,31 @@ import { ShaderPass } from './three.js/examples/jsm/postprocessing/ShaderPass.js
 import { FXAAShader } from './three.js/examples/jsm/shaders/FXAAShader.js';
 
 
-const videoSource = require('./saved.mp4');
-const videoSource2 = require('./1.mp4');
-const videoSource3 = require('./2.mp4');
+const videoSource = require('./1.mp4');
+const videoSource2 = require('./2.mp4');
+const videoSource3 = require('./3.mp4');
+const videoSource4 = require('./4.mp4');
+const videoSource5 = require('./5.mp4');
+const videoSource6 = require('./6.mp4');
 
 const audioSrc = require('./tap2.mp3');
 
 
-let videoIdx = 0;
-let videos = [videoSource, videoSource2, videoSource3];
+
+let videos = [videoSource, videoSource2, videoSource3, videoSource4, videoSource5, videoSource6 ];
+let videoIdx = Math.floor(Math.random() * videos.length);
+console.log('videoIdx', videoIdx);
 var video;
 var texture;
 var videoImageContext;
 let clock;
 var clip,clip2;
 var sound = true;
-
-// const uvMap16 = [
-//     [0, 1, 0.25, 1, 0, 0.75, 0.25, 0.75],
-//     [0.25, 1, 0.5, 1, 0.25, 0.75, 0.5, 0.75],
-//     [0, 0.75, 0.25, 0.75, 0, 0.5, 0.25, 0.5],
-//     [0.25, 0.75, 0.5, 0.75, 0.25, 0.5, 0.5, 0.5],
-//     [0.5, 1, 0.75, 1, 0.5, 0.75, 0.75, 0.75],
-//     [0.75, 1, 1, 1, 0.75, 0.75, 1, 0.75],
-//     [0.5, 0.75, 0.75, 0.75, 0.5, 0.5, 0.75, 0.5],
-//     [0.75, 0.75, 1, 0.75, 0.75, 0.5, 1, 0.5],
-//     [0, 0.5, 0.25, 0.5, 0, 0.25, 0.25, 0.25],
-//     [0.25, 0.5, 0.5, 0.5, 0.25, 0.25, 0.5, 0.25],
-//     [0, 0.25, 0.25, 0.25, 0, 0, 0.25, 0],
-//     [0.25, 0.25, 0.5, 0.25, 0.25, 0, 0.5, 0],
-//     [0.5, 0.5, 0.75, 0.5, 0.5, 0.25, 0.75, 0.25],
-//     [0.75, 0.5, 1, 0.5, 0.75, 0.25, 1, 0.25],
-//     [0.5, 0.25, 0.75, 0.25, 0.5, 0, 0.75, 0],
-//     [0.75, 0.25, 1, 0.25, 0.75, 0, 1, 0]
-// ];
-
-// const uvMap16 = [
-//     [0, 1, 0.24875, 1, 0, 0.75125, 0.24875, 0.75125],
-//     [0.25125, 1, 0.49875, 1, 0.25125, 0.75125, 0.49875, 0.75125],
-//     [0.50125, 1, 0.74875, 1, 0.50125, 0.75125, 0.74875, 0.75125],
-//     [0.75125, 1, 1, 1, 0.75125, 0.75125, 1, 0.75125],
-//     [0, 0.74875, 0.24875, 0.74875, 0, 0.50125, 0.24875, 0.50125],
-//     [0.25125, 0.74875, 0.49875, 0.74875, 0.25125, 0.50125, 0.49875, 0.50125],
-//     [0.50125, 0.74875, 0.74875, 0.74875, 0.50125, 0.50125, 0.74875, 0.50125],
-//     [0.75125, 0.74875, 1, 0.74875, 0.75125, 0.50125, 1, 0.50125],
-//     [0, 0.49875, 0.24875, 0.49875, 0, 0.25125, 0.24875, 0.25125],
-//     [0.25125, 0.49875, 0.49875, 0.49875, 0.25125, 0.25125, 0.49875, 0.25125],
-//     [0.50125, 0.49875, 0.74875, 0.49875, 0.50125, 0.25125, 0.74875, 0.25125],
-//     [0.75125, 0.49875, 1, 0.49875, 0.75125, 0.25125, 1, 0.25125],
-//     [0, 0.24875, 0.24875, 0.24875, 0, 0, 0.24875, 0],
-//     [0.25125, 0.24875, 0.49875, 0.24875, 0.25125, 0, 0.49875, 0],
-//     [0.50125, 0.24875, 0.74875, 0.24875, 0.50125, 0, 0.74875, 0],
-//     [0.75125, 0.24875, 1, 0.24875, 0.75125, 0, 1, 0]
-// ];
+var isMobile = false; //initiate as false
 
 const uvMap16 =[
   [0,1,0.24375,1,0,0.75625,0.24375,0.75625],[0.25625,1,0.49375,1,0.25625,0.75625,0.49375,0.75625],[0.50625,1,0.74375,1,0.50625,0.75625,0.74375,0.75625],[0.75625,1,1,1,0.75625,0.75625,1,0.75625],[0,0.74375,0.24375,0.74375,0,0.50625,0.24375,0.50625],[0.25625,0.74375,0.49375,0.74375,0.25625,0.50625,0.49375,0.50625],[0.50625,0.74375,0.74375,0.74375,0.50625,0.50625,0.74375,0.50625],[0.75625,0.74375,1,0.74375,0.75625,0.50625,1,0.50625],[0,0.49375,0.24375,0.49375,0,0.25625,0.24375,0.25625],[0.25625,0.49375,0.49375,0.49375,0.25625,0.25625,0.49375,0.25625],[0.50625,0.49375,0.74375,0.49375,0.50625,0.25625,0.74375,0.25625],[0.75625,0.49375,1,0.49375,0.75625,0.25625,1,0.25625],[0,0.24375,0.24375,0.24375,0,0,0.24375,0],[0.25625,0.24375,0.49375,0.24375,0.25625,0,0.49375,0],[0.50625,0.24375,0.74375,0.24375,0.50625,0,0.74375,0],[0.75625,0.24375,1,0.24375,0.75625,0,1,0]
 ];
-
-
-// const uvTo = [0,1,4,5,2,3,6,7,8,9,12,13,10,11,14,15];
 
 let _blank = 15;
 var container, stats;
@@ -83,7 +48,6 @@ var pieces = [];
 let initialPos = [];
 
 var coord = [];
-
 var initialQ;
 
 const randomButton = document.getElementById('random');
@@ -166,11 +130,10 @@ animate();
 
 function init() {
   initialPos = getRandomPos();
-  console.log('initial Pos', initialPos);
 
 
   video = document.createElement( 'video' );
-  video.src = videos[2];
+  video.src = videos[videoIdx];
   video.muted = true;
   video.setAttribute('playsinline', true);
   video.loop = true;
@@ -195,7 +158,10 @@ function init() {
 	scene = new THREE.Scene();
 
 	camera = new THREE.PerspectiveCamera( 45, width / height, 0.1, 200 );
-	camera.position.set(0 , 100, 0 );
+
+  // camera.position.set(0 , 110, 0 );
+  setCameraLocation();
+
 	camera.lookAt(0,0,0);
 
 
@@ -301,9 +267,6 @@ function init() {
 
   group.add(pieceGroup);
 
-  console.log('_blank', _blank);
-  console.log('pieces', pieces);
-
   const animationGroup = new THREE.AnimationObjectGroup();
   animationGroup.add(group);
 
@@ -337,10 +300,6 @@ function init() {
 	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
 	composer.addPass( effectFXAA );
 
-  // window.onload = ()=> { console.log('onload');video.play();}
-  // document.addEventListener('DOMContentLoaded', ()=> { console.log('onload');video.play();});
-
-
 	window.addEventListener( 'resize', onWindowResize, false );
 
 	window.addEventListener( 'mousemove', onTouchMove );
@@ -361,7 +320,6 @@ function init() {
 
 
   function onSoundClick() {
-    console.log('clicked', sound);
     if (sound) {
       soundOnButton.style.display = 'none';
       soundOffButton.style.display = 'inline';
@@ -370,7 +328,6 @@ function init() {
       soundOnButton.style.display = 'inline';
     }
     sound = !sound;
-    console.log('sound', sound);
   }
 
   function onDocumentTouchEnd(event) {
@@ -386,24 +343,20 @@ function init() {
 
 
   function onChangeClick() {
-    console.log('on change clicked');
     videoIdx++;
-    if (videoIdx > 2) {
+    if (videoIdx >= videos.length) {
       videoIdx = 0;
     }
 
     videoImageContext.clearRect(0,0,480,480);
     video.src = videos[videoIdx];
-    console.log('video', video);
     video.play();
 
   }
 
   function onRandomClick() {
-    console.log('random clicked');
 
     let randomPos = getRandomPos();
-    console.log('randomPos', randomPos);
 
     randomPos.forEach((el, i)=> {
       if (el !== 15) {
@@ -419,18 +372,11 @@ function init() {
   }
 
   function onOriginalClick() {
-    console.log('original mode', originalMode);
     outlinePass.selectedObjects = [];
-    // // console.log('timescale',   action.timeScale );
-    // console.log(' !originalMode? 1: -1',    originalMode? 1: -1 );
-    console.log('quaternion', group.quaternion);
-
     let action = mixers[0].clipAction(clip);
-
 
     if (originalMode) {
         action.reset();
-
         action.timeScale = 1;
         action.setLoop(THREE.LoopOnce);
         action.clampWhenFinished = true;
@@ -444,32 +390,16 @@ function init() {
 
 
           originalMode = !originalMode;
-
-    // console.log('action.timeScale',   action.timeScale);
-
-    // mesh.userData.mixer = new THREE.AnimationMixer(mesh);
   }
 
 	function onclick(srcEvent) {
-    console.log('selectedObjects', selectedObjects)
-
-
-		console.log('clicked!', selectedObjects[0] ? selectedObjects[0].data : null);
-		console.log('_blank!', _blank);
-		// get some data
     if (selectedObjects.length ===0) {
-
-        console.log('zero out');
         onTouchMove(srcEvent);
         // checkIntersection();
     }
 
-
 		let index = selectedObjects[0].data;
 		let pos = selectedObjects[0].pos;
-
-			console.log('index', index);
-      	console.log('pos', pos);
 
 		if (
 			( [0,1,2,3].includes(pos) && [0,1,2,3].includes(_blank) )
@@ -480,11 +410,10 @@ function init() {
 			||
 			( [12,13,14,15].includes(pos) && [12,13,14,15].includes(_blank) )
 		) {
-
-        console.log('same row');
+      if (sound) {
+        tabSound.play();
+      }
 			if (pos < _blank) {
-          console.log('left');
-
 				let diff = _blank - pos;
 				for (let i = 0; i < diff; i ++) {
 					let curr = _blank - 1 - i;
@@ -495,7 +424,6 @@ function init() {
 					pieces[currIndex]['pos'] = _blank -i;
 				}
 			} else {
-            console.log('right');
 				let diff = pos - _blank;
 				for (let i = 0; i < diff; i ++) {
 					let curr = _blank + 1 + i;
@@ -506,19 +434,14 @@ function init() {
 				}
 
 			}
-      console.log('sound tab?', sound);
-      if (sound) {
-        tabSound.play();
-      }
 
       _blank = pos;
 
 		} else if ((pos - _blank) % 4 === 0){
-      console.log('same column');
-
+      if (sound) {
+        tabSound.play();
+      }
 			if (pos < _blank) {
-        console.log('bottom');
-
 				let diff = parseInt((_blank - pos)/4);
 				for (let i = 0; i < diff; i ++) {
 					let curr = _blank - ((i+1)*4);
@@ -528,8 +451,6 @@ function init() {
 					pieces[currIndex]['pos'] = _blank - i*4;
 				}
 			} else {
-        console.log('top');
-
 				let diff = parseInt((pos - _blank)/4);
 				for (let i = 0; i < diff; i ++) {
 					let curr = _blank + ((i+1)*4);
@@ -540,24 +461,18 @@ function init() {
 				}
 
 			}
-      if (sound) {
-        tabSound.play();
-      }
 			_blank = pos;
 		} else {
 
-
-
-			// not a vaild move
-			console.log('no move');
 		}
-
 }
 
 
 	function onTouchMove( event ) {
-    //console.log('touch move', event);
 		var x, y;
+
+    if (!event)
+      return
 
 		if ( event.changedTouches ) {
 
@@ -608,23 +523,58 @@ function init() {
 }
 
 function onWindowResize() {
-  console.log('resizing');
 	var width = window.innerWidth;
 	var height = window.innerHeight - 4;
+  camera.aspect  = width/ height;
 
-	camera.aspect = width / height;
+  setCameraLocation();
 	camera.updateProjectionMatrix();
-
 	renderer.setSize( width, height );
 	composer.setSize( width, height );
+
+
 
 	effectFXAA.uniforms[ 'resolution' ].value.set( 1 / window.innerWidth, 1 / window.innerHeight );
 
 }
 
+function setCameraLocation() {
+  // if (camera.aspect > 1.7 || camera.aspect < 0.6) {
+  //   if (window.innerWidth <= 414 || window.innerHeight  <= 414)  {
+  //     console.log('w or h smaller than 400');
+  //
+  //     camera.position.set(0,60,0);
+  //   }
+  //
+  // } else {
+  //  console.log('else')
+
+  // }
+  if (camera.aspect > 1.7) {
+    if (window.innerHeight <= 400) {
+      camera.position.set(0,68,0);
+    } else if (window.innerHeight <= 500) {
+        camera.position.set(0,65,0);
+    } else {
+        camera.position.set(0,90,0);
+    }
+
+
+  } else {
+    if (window.innerWidth <= 400) {
+      camera.position.set(0,110,0);
+    } else if (window.innerWidth <= 500) {
+      camera.position.set(0,100,0);
+    } else if (window.innerWidth <= 768) {
+      camera.position.set(0,95,0);
+    } else {
+      camera.position.set(0,90,0);
+    }
+  }
+
+}
+
 function animate() {
-
-
   if(video.readyState === video.HAVE_ENOUGH_DATA){
     //draw video to canvas starting from upper left corner
     //console.log('video', video);
@@ -633,8 +583,6 @@ function animate() {
     texture.needsUpdate = true;
   }
  var timer = performance.now();
-
-
   var mixerUpdateDelta = clock.getDelta();
 
   for ( var i = 0; i < mixers.length; ++ i ) {
