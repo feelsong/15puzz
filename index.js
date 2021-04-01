@@ -1,5 +1,4 @@
 import * as THREE from './three.js/build/three.module.js';
-import { OrbitControls } from './three.js/examples/jsm/controls/OrbitControls.js';
 import { EffectComposer } from './three.js/examples/jsm/postprocessing/EffectComposer.js';
 import { OutlinePass } from './three.js/examples/jsm/postprocessing/OutlinePass.js';
 import { RenderPass } from './three.js/examples/jsm/postprocessing/RenderPass.js';
@@ -76,9 +75,11 @@ function getRandomPos() {
     num += 1;
     arr = shuffleArray([...Array(16).keys()]);
     arr = shuffleArray(arr);
-  } while (findSolvable(arr))
-
-  console.log('num of attempts', num);
+    console.log('before', arr);
+    console.log('findSolvable(arr)', arr);
+  } while (!findSolvable(arr))
+  console.log('num', num);
+  console.log('arr', arr);
   return arr;
 }
 
@@ -163,26 +164,6 @@ function init() {
   setCameraLocation();
 
 	camera.lookAt(0,0,0);
-
-
-	scene.add( new THREE.AmbientLight( 0xaaaaaa, 0.2 ) );
-
-	var light = new THREE.DirectionalLight( 0xddffdd, 0.6 );
-	light.position.set( 1, 1, 1 );
-	light.castShadow = true;
-	light.shadow.mapSize.width = 1024;
-	light.shadow.mapSize.height = 1024;
-
-	var d = 10;
-
-	light.shadow.camera.left = - d;
-	light.shadow.camera.right = d;
-	light.shadow.camera.top = d;
-	light.shadow.camera.bottom = - d;
-
-	light.shadow.camera.far = 1000;
-
-	scene.add( light );
 	scene.add( group );
 
 

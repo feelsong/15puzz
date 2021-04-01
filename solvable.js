@@ -38,7 +38,9 @@ function findNumberOfInversion(input) {
 }
 function findSolvable(input) {
   var numInversion = findNumberOfInversion(input);
+  // console.log('numInversion', numInversion);
   var evenInversion = !(numInversion % 2) ;
+  // console.log('numInversion', numInversion, 'is Even?', evenInversion);
   if (findBlankRowIfEven(input)) {
     return !evenInversion;
   } else {
@@ -46,14 +48,14 @@ function findSolvable(input) {
   }
 }
 
-//[12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]
-//[5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]
-//[2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]
+[12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]
+[5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]
+[2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]
 
-// findSolvable([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
-// findSolvable([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
-// findSolvable([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]);
-//
-// findBlankRowIfEven([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
-// findBlankRowIfEven([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
-// findBlankRowIfEven([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]);
+findSolvable([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
+findSolvable([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
+findSolvable([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]);
+
+findBlankRowIfEven([12,1,9,2,0,11,7,3,4,15,8,5,14,13,10,6]);
+findBlankRowIfEven([5,12,6,9,7,8,10,15,14,1,11,4,13,2,0,3]);
+findBlankRowIfEven([2,8,0,14,13,10,3,5,12,15,9,11,1,6,7,4]);
