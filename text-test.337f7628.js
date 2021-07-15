@@ -38412,19 +38412,19 @@ var FXAAShader = {
 };
 exports.FXAAShader = FXAAShader;
 },{"../../../build/three.module.js":"EU5q"}],"dMwk":[function(require,module,exports) {
-module.exports = "/1.c07f42b8.mp4";
+module.exports = "/15puzz/1.c07f42b8.mp4";
 },{}],"J0uI":[function(require,module,exports) {
-module.exports = "/2.a5a77a9e.mp4";
+module.exports = "/15puzz/2.a5a77a9e.mp4";
 },{}],"jY1R":[function(require,module,exports) {
-module.exports = "/3.252c1db6.mp4";
+module.exports = "/15puzz/3.252c1db6.mp4";
 },{}],"IyNK":[function(require,module,exports) {
-module.exports = "/4.1f5d1f67.mp4";
+module.exports = "/15puzz/4.1f5d1f67.mp4";
 },{}],"aIY8":[function(require,module,exports) {
-module.exports = "/5.0ef2e136.mp4";
+module.exports = "/15puzz/5.0ef2e136.mp4";
 },{}],"f6Yn":[function(require,module,exports) {
-module.exports = "/6.59b1e038.mp4";
+module.exports = "/15puzz/6.59b1e038.mp4";
 },{}],"CNEo":[function(require,module,exports) {
-module.exports = "/tap2.b4e3b129.mp3";
+module.exports = "/15puzz/tap2.b4e3b129.mp3";
 },{}],"Focm":[function(require,module,exports) {
 "use strict";
 
