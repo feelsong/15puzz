@@ -38412,19 +38412,19 @@ var FXAAShader = {
 };
 exports.FXAAShader = FXAAShader;
 },{"../../../build/three.module.js":"EU5q"}],"dMwk":[function(require,module,exports) {
-module.exports = "/1.c07f42b8.mp4";
+module.exports = "1.c07f42b8.mp4";
 },{}],"J0uI":[function(require,module,exports) {
-module.exports = "/2.a5a77a9e.mp4";
+module.exports = "2.a5a77a9e.mp4";
 },{}],"jY1R":[function(require,module,exports) {
-module.exports = "/3.252c1db6.mp4";
+module.exports = "3.252c1db6.mp4";
 },{}],"IyNK":[function(require,module,exports) {
-module.exports = "/4.1f5d1f67.mp4";
+module.exports = "4.1f5d1f67.mp4";
 },{}],"aIY8":[function(require,module,exports) {
-module.exports = "/5.0ef2e136.mp4";
+module.exports = "5.0ef2e136.mp4";
 },{}],"f6Yn":[function(require,module,exports) {
-module.exports = "/6.59b1e038.mp4";
+module.exports = "6.59b1e038.mp4";
 },{}],"CNEo":[function(require,module,exports) {
-module.exports = "/tap2.b4e3b129.mp3";
+module.exports = "tap2.b4e3b129.mp3";
 },{}],"Focm":[function(require,module,exports) {
 "use strict";
 
@@ -38985,4 +38985,4 @@ function animate() {
   composer.render();
 }
 },{"./three.js/build/three.module.js":"EU5q","./three.js/examples/jsm/postprocessing/EffectComposer.js":"FsvZ","./three.js/examples/jsm/postprocessing/OutlinePass.js":"NoGa","./three.js/examples/jsm/postprocessing/RenderPass.js":"Qxhe","./three.js/examples/jsm/postprocessing/ShaderPass.js":"kzVk","./three.js/examples/jsm/shaders/FXAAShader.js":"ABEm","./1.mp4":"dMwk","./2.mp4":"J0uI","./3.mp4":"jY1R","./4.mp4":"IyNK","./5.mp4":"aIY8","./6.mp4":"f6Yn","./tap2.mp3":"CNEo"}]},{},["Focm"], null)
-//# sourceMappingURL=/text-test.337f7628.js.map
+//# sourceMappingURL=text-test.337f7628.js.map
