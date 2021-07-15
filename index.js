@@ -55,6 +55,7 @@ const changeButton = document.getElementById('change');
 const soundButton = document.getElementById('sound');
 const soundOnButton = document.getElementById('sound-on');
 const soundOffButton = document.getElementById('sound-off');
+// const solveButton = document.getElementById('solve');
 
 const tabSound = new Audio(audioSrc);
 tabSound.volume = 0.2;
@@ -554,6 +555,25 @@ function setCameraLocation() {
   }
 
 }
+  // solveButton.addEventListener('click', onSolveClick, true);
+
+  window.solve = onSolveClick;
+  // window.a = 'hello';
+
+  function onSolveClick() {
+    console.log('solve clicked');
+
+    [...Array(15).keys()].forEach((i)=> {
+
+      let currPiece = pieces[i];
+      // console.log('currPiece', currPiece);
+      currPiece.pos = i;
+      currPiece.position.x = coord[i].x;
+      currPiece.position.z = coord[i].z;
+
+    });
+    _blank = 15;
+  }
 
 function animate() {
   if(video.readyState === video.HAVE_ENOUGH_DATA){
