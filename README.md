@@ -1,4 +1,6 @@
-# 15puzz
+# 15PUZZ
+
+- Video + Sliding Puzzle AKA 15 Puzzle
 
 # Inspiration
 Always wanted to make something like this. Using Video to make some puzzles.
