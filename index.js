@@ -12,12 +12,18 @@ const videoSource3 = require('./3.mp4');
 const videoSource4 = require('./4.mp4');
 const videoSource5 = require('./5.mp4');
 const videoSource6 = require('./6.mp4');
+const videoSource7 = require('./leds.mp4');
 
 const audioSrc = require('./tap2.mp3');
 
+// let muxVideoUrl = 'https://muxed.s3.amazonaws.com/leds.mp4';
+// fetch(muxVideoUrl).then((res)=> res.blob()).then((blob)=> {
+//   const src = window.URL.createObjectURL(blob)
+//   console.log('added src', src);
+//   vidoes.push(src);
+// })
 
-
-let videos = [videoSource, videoSource2, videoSource3, videoSource4, videoSource5, videoSource6 ];
+let videos = [videoSource, videoSource2, videoSource3, videoSource4, videoSource5, videoSource6, videoSource7 ];
 let videoIdx = Math.floor(Math.random() * videos.length);
 console.log('videoIdx', videoIdx);
 var video;
