@@ -13,7 +13,6 @@ const videoSource3 = require('./3.mp4');
 const videoSource4 = require('./4.mp4');
 const videoSource5 = require('./5.mp4');
 const videoSource6 = require('./6.mp4');
-
 const audioSrc = require('./tap2.mp3');
 
 
@@ -130,8 +129,6 @@ animate();
 
 function init() {
   initialPos = getRandomPos();
-
-
   video = document.createElement( 'video' );
   video.src = videos[videoIdx];
   video.muted = true;
@@ -187,8 +184,6 @@ function init() {
 
 
 	var material = new THREE.MeshPhongMaterial( { color: 0xffaaff } );
-
-
    let videoImage = document.createElement( 'canvas' );
     videoImage.width = 480;
     videoImage.height = 480;
@@ -219,7 +214,7 @@ function init() {
 							planeMaterial
 						);
 
-            plane.position.y = 0;
+            plane.position.y = 1.2;
             /*
 						plane.position.z = 10 * i + 1 * i;
 						plane.position.x = 10 * j + 1 * j - 25;
@@ -240,13 +235,13 @@ function init() {
   var geometry = new THREE.PlaneGeometry( 50, 50 );
   var material = new THREE.MeshBasicMaterial( {color: 0x505050, side: THREE.DoubleSide} );
   var mid = new THREE.Mesh( geometry, material );
-  mid.position.y = -0.05;
+  mid.position.y = -0.5;
   mid.rotation.x = Math.PI / 2;
   group.add( mid );
 
   let backGeo = new THREE.PlaneBufferGeometry( 40, 40 );
   let backPlane = new THREE.Mesh(backGeo,planeMaterial);
-  backPlane.position.y = -0.1;
+  backPlane.position.y = -2;
   backPlane.rotation.x = Math.PI / 2;
   backPlane.rotation.z = Math.PI *0.5;
   // backPlane.visible = false;
