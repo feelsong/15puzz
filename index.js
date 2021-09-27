@@ -415,7 +415,7 @@ function init() {
 					let currPiece = pieces.filter(piece => piece.pos === curr)[0];
 					let currIndex = currPiece.data;
 
-					pieces[currIndex].position.set(coord[_blank-i].x, 0, coord[_blank-i].z);
+					pieces[currIndex].position.set(coord[_blank-i].x, 1.2, coord[_blank-i].z);
 					pieces[currIndex]['pos'] = _blank -i;
 				}
 			} else {
@@ -424,7 +424,7 @@ function init() {
 					let curr = _blank + 1 + i;
 					let currPiece = pieces.filter(piece => piece.pos === curr)[0];
 					let currIndex = currPiece.data;
-					pieces[currIndex].position.set(coord[_blank+i].x, 0, coord[_blank+i].z);
+					pieces[currIndex].position.set(coord[_blank+i].x, 1.2, coord[_blank+i].z);
 					pieces[currIndex]['pos'] = _blank + i;
 				}
 
@@ -442,7 +442,7 @@ function init() {
 					let curr = _blank - ((i+1)*4);
 					let currPiece = pieces.filter(piece => piece.pos === curr)[0];
 					let currIndex = currPiece.data;
-					pieces[currIndex].position.set(coord[_blank-i*4].x, 0, coord[_blank-i*4].z);
+					pieces[currIndex].position.set(coord[_blank-i*4].x, 1.2, coord[_blank-i*4].z);
 					pieces[currIndex]['pos'] = _blank - i*4;
 				}
 			} else {
@@ -451,7 +451,7 @@ function init() {
 					let curr = _blank + ((i+1)*4);
 					let currPiece = pieces.filter(piece => piece.pos === curr)[0];
 					let currIndex = currPiece.data;
-					pieces[currIndex].position.set(coord[_blank+i*4].x, 0, coord[_blank+i*4].z);
+					pieces[currIndex].position.set(coord[_blank+i*4].x, 1.2, coord[_blank+i*4].z);
 					pieces[currIndex]['pos'] = _blank  + i*4;
 				}
 
